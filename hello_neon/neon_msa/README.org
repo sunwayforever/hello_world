@@ -1,0 +1,34 @@
+#+TITLE: neon_msa
+#+AUTHOR: Wei Sun (孙伟)
+#+EMAIL: wei.sun@hexintek.com
+#+DATE: 2023-05-06 Sat 11:13
+#+CATEGORY:
+#+FILETAGS:
+
+* neon_msa
+
+使用 msa 实现 neon 的基本操作时主要有以下几个问题:
+
+1. neon 支持 64/128 bit vector, msa 只支持 128 bit, 导致 msa 实现类似于 vadd_s8
+   的指令时会浪费一半的计算
+
+2. msa 不支持 neon 的 widen/narrow 类型的指令, 例如 =int16x8_t vaddl_s8(int8x8_t
+   a, int8x8_t b)=, 需要额外的代码把 msa 的输入变成 =int16x8_t=, 而 msa 又不支持
+   用于数据类型转换的 =vmov= 指令, 导致转换很低效.
+
+3. msa 不支持 neon 的 signed/unsigned 类型指令, 例如 =int8x8_t
+   vuqadd_s8(int8x8_t a,uint8x8_t b)=, 因为 msa 的输入输出类型基本上总是相同的,
+   需要手动做额外的数据转换
+
+4. msa 不支持 neon 的 high 类型的指令, 例如 =int16x8_t vaddl_high_s8(int8x16_t
+   a, int8x16_t b)=, 需要手动从 =int8x16_t= 构造 =int16x8_t=
+
+5. msa 不支持 cross vector 类型的指令, 例如 =int8_t vaddv_s8(int8x8_t a)=
+
+6. 当涉及到 neon 的 pairwise 操作时(例如 =int16x4_t vpadal_s8(int16x4_t
+   a,int8x8_t b)=) 且 neon 是 64-bit vector 时, msa 会因为 vector 后一半填充的 0
+   导致 pairwise 结果错误.
+
+7. msa 不支持 lane 指令和 scalar 指令
+
+8. msa 的 left shift 与 neon 的定义差异太大, 无法支持

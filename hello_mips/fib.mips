@@ -1,0 +1,36 @@
+    .text
+    .global
+
+main:                           #1 1 2 3 5 8
+    li      $a0, 5
+    bal     fib
+end:
+    b       exit
+
+fib:
+    sub     $sp, 32
+    sw      $ra, 28($sp)
+    sw      $s1, 24($sp)
+    sw      $s2, 20($sp)
+
+    move    $s1, $a0
+    blt     $s1, 2, fib_base
+
+    sub     $a0, $s1, 1
+    bal     fib
+    move    $s2, $v0
+
+    sub     $a0, $s1, 2
+    bal     fib
+    add     $v0, $s2
+    b       fib_return
+
+fib_base:
+    li      $v0, 1
+
+fib_return:
+    lw      $ra, 28($sp)
+    lw      $s1, 24($sp)
+    lw      $s2, 20($sp)
+    add     $sp, 32
+    jr      $ra

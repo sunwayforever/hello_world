@@ -1,0 +1,17 @@
+    .text
+    .global main
+main:
+    la      $t1, buffer
+    move    $t3, $0
+loop:
+    lb      $t2, ($t1)
+    beqz    $t2, endloop
+    mul     $t3, 10
+    sub     $t2, 48
+    add     $t3, $t2
+    add     $t1, 1
+    b       loop
+endloop:
+    b       exit
+    .data
+buffer: .asciiz "223"

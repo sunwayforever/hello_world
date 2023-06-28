@@ -1,0 +1,332 @@
+* 指令格式
+
+=v{1.q}{2.r}{3.d}{13.p}{11.h}xxx{17.n|m|p|a|i|x}{16.u|s}{4.l}{5.w}{12.hn}{6.q}{14.nm}{15.v}{7.b|s|h|d}_{8.lane{q}}_{9.high}_{10.n}_type=
+
+- 1.q saturating
+- 2.r rounding 
+- 3.d doubling
+- 4.l widen
+- 5.w 只 widen 一个输入参数
+- 6.q long (128-bit)
+- 7.b 参数都是 scalar: int8,int16,int32,int64
+- 8.lane, 使用 v[lane] 而不是 v[i] 
+- 9.high, 使用 x[i+x] 而不是 x[i]
+- 10.n 有一个参数是 scalar
+- 11.h half narrow, 例如 xx>>1
+- 12.hn high narrow, 例如 xx>>8
+- 13.p pairwise
+- 14.nm max 类指令使用 nm 表示符合 ieee754
+- 15.v across vector
+- 16.u unsigned, 输入是 signed, 输出变成 unsigned
+- 16.s signed, 输入是 unsigned, 输出变成 signed
+- 17.n round to nearest even
+- 17.m rount to minus inf
+- 17.p round to plus inf
+- 17.a round to nearest away
+
+* List of Intrinsics [1/14]
+
+https://arm-software.github.io/acle/neon_intrinsics/advsimd.html
+
+1. [X] Basic intrinsics [11/11]
+   1. [X] Vector arithmetic [12/12]
+      1. [X] Add [4/4]
+         1. [X] Addition
+         2. [X] Widening addition
+         3. [X] Narrowing addition
+         4. [X] Saturating addition
+      2. [X] Multiply [6/6]
+         1. [X] Multiplication
+         2. +Multiply extended+
+         3. [X] Multiply-accumulate
+         4. [X] Multiply-accumulate and widen
+         5. [X] Fused multiply-accumulate
+         6. [X] Saturating multiply
+         7. +Saturating multiply-accumulate+
+         8. [X] Widening multiplication
+         9. +Saturating multiply by scalar and widen+
+         10. +Saturating multiply-accumulate by scalar and widen+
+      3. [X] Polynomial [1/1]
+         1. [X] Polynomial multiply
+      4. +Division+
+      5. [X] Subtract [4/4]
+         1. [X] Subtraction
+         2. [X] Widening subtraction
+         3. [X] Narrowing subtraction
+         4. [X] Saturating subtract
+      6. [X] Absolute [6/6]
+         1. [X] Absolute difference
+         2. [X] Widening absolute difference
+         3. [X] Absolute difference and accumulate
+         4. [X] Widening absolute difference and accumulate
+         5. [X] Absolute value
+         6. [X] Saturating absolute value
+      7. [X] Maximum
+      8. [X] Minimum
+      9. [X] Rounding
+      10. [X] Reciprocal [2/2]
+          1. [X] Reciprocal estimate
+          2. [X] Reciprocal square-root estimate
+          3. +Reciprocal exponent+
+      11. [X] Square root
+      12. [X] Pairwise arithmetic [4/4]
+          1. [X] Pairwise addition
+          2. [X] Pairwise addition and widen
+          3. [X] Pairwise maximum
+          4. [X] Pairwise minimum
+          5. +Pairwise maximum (IEEE754)+
+          6. +Pairwise minimum (IEEE754)+
+      13. [X] Across vector arithmetic [4/4]
+          1. [X] Addition across vector
+          2. [X] Addition across vector widening
+          3. [X] Maximum across vector
+          4. [X] Minimum across vector
+          5. +Maximum across vector (IEEE754)+
+          6. +Minimum across vector (IEEE754)+
+   2. [X] Compare [4/4]
+      1. [X] Bitwise equal
+      2. +Bitwise equal to zero+
+      3. [X] Greater than or equal to
+      4. +Less than or equal to+
+      5. +Greater than+
+      6. +Less than+
+      7. [X] Absolute greater than or equal to
+      8. +Absolute less than or equal to+
+      9. +Absolute greater than+
+      10. +Absolute less than+
+      11. [X] Bitwise not equal to zero
+   3. [X] Shift [2/2]
+      1. [X] Left [5/5]
+         1. [X] Vector shift left
+         2. [X] Vector saturating shift left
+         3. [X] Vector rounding shift left
+         4. +Vector saturating rounding shift left+
+         5. [X] Vector shift left and widen
+         6. [X] Vector shift left and insert
+      2. [X] Right [9/9]
+         1. [X] Vector shift right
+         2. [X] Vector rounding shift right
+         3. [X] Vector shift right and accumulate
+         4. [X] Vector rounding shift right and accumulate
+         5. [X] Vector shift right and narrow
+         6. [X] Vector saturating shift right and narrow
+         7. [X] Vector saturating rounding shift right and narrow
+         8. [X] Vector rounding shift right and narrow
+         9. [X] Vector shift right and insert
+   4. [X] Data type conversion [2/2]
+      1. [X] Conversions
+      2. [X] Reinterpret casts
+   5. [X] Move [3/3]
+      1. [X] Narrow
+      2. [X] Widen
+      3. [X] Saturating narrow
+   6. [X] Scalar arithmetic [0/0]
+      1. +Vector multiply-accumulate by scalar+
+      2. +Vector multiply-subtract by scalar+
+      3. +Vector multiply by scalar+
+      4. +Vector multiply by scalar and widen+
+      5. +Vector multiply-accumulate by scalar and widen+
+      6. +Fused multiply-accumulate by scalar+
+   7. [X] Logical [7/7]
+      1. [X] Negate
+      2. [X] Saturating Negate
+      3. [X] Bitwise NOT
+      4. [X] AND
+      5. [X] OR
+      6. [X] Exclusive OR
+      7. [X] OR-NOT
+   8. [X] Bit manipulation [5/5]
+      1. [X] Count leading sign bits
+      2. [X] Count leading zeros
+      3. [X] Population count
+      4. [X] Bitwise clear
+      5. [X] Bitwise select
+   9. [X] Vector manipulation [13/13]
+      1. [X] Copy vector lane
+      2. [X] Reverse bits within elements
+      3. [X] Create vector
+      4. [X] Set all lanes to the same value
+      5. [X] Combine vectors
+      6. [X] Split vectors
+      7. [X] Extract one element from vector
+      8. [X] Extract vector from a pair of vectors
+      9. [X] Reverse elements
+      10. [X] Zip elements
+      11. [X] Unzip elements
+      12. [X] Transpose elements
+      13. [X] Set vector lane
+   10. [X] Load [1/1]
+       1. [X] Stride
+   11. +Store [0/0]+
+       1. +Stride+
+   12. [X] Table lookup [2/2]
+       1. [X] Table lookup
+       2. [X] Extended table lookup
+2. [ ] Crypto [0/2]
+   1. [ ] Cryptography [0/3]
+      1. [ ] AES
+      2. [ ] SHA1
+      3. [ ] SHA256
+   2. [ ] Vector arithmetic [0/1]
+      1. [ ] Polynomial [0/2]
+         1. [ ] Polynomial multiply
+         2. [ ] Polynomial addition
+3. [ ] CRC32 [0/1]
+   1. [ ] Cryptography [0/1]
+      1. [ ] CRC32
+4. [ ] sqrdmlah intrinsics (From ARMv8.1-A) [0/1]
+   1. [ ] Vector arithmetic [0/1]
+      1. [ ] Multiply [0/2]
+         1. [ ] Saturating multiply-accumulate
+         2. [ ] Saturating multiply-accumulate by element
+5. [ ] fp16 scalar intrinsics (available through from ARMv8.2-A) [0/4]
+   1. [ ] Vector arithmetic [0/10]
+      1. [ ] Absolute [0/2]
+         1. [ ] Absolute value
+         2. [ ] Absolute difference
+      2. [ ] Reciprocal [0/3]
+         1. [ ] Reciprocal estimate
+         2. [ ] Reciprocal square-root estimate
+         3. [ ] Reciprocal step
+      3. [ ] Rounding
+      4. [ ] Square root
+      5. [ ] Add [0/1]
+         1. [ ] Addition
+      6. [ ] Division
+      7. [ ] Maximum
+      8. [ ] Minimum
+      9. [ ] Multiply [0/3]
+         1. [ ] Multiplication
+         2. [ ] Multiply extended
+         3. [ ] Fused multiply-accumulate
+      10. [ ] Subtract [0/1]
+          1. [ ] Subtraction
+   2. [ ] Compare [0/14]
+      1. [ ] Bitwise equal to zero
+      2. [ ] Greater than or equal to zero
+      3. [ ] Greater than zero
+      4. [ ] Less than or equal to zero
+      5. [ ] Less than zero
+      6. [ ] Absolute greater than or equal to
+      7. [ ] Absolute greater than
+      8. [ ] Absolute less than or equal to
+      9. [ ] Absolute less than
+      10. [ ] Equal to
+      11. [ ] Greater than or equal to
+      12. [ ] Greater than
+      13. [ ] Less than or equal to
+      14. [ ] Less than
+   3. [ ] Data type conversion [0/1]
+      1. [ ] Conversions
+   4. [ ] Logical [0/1]
+      1. [ ] Negate
+6. [ ] fp16 vector intrinsics (from ARMv8.2-A) [0/4]
+   1. [ ] Vector arithmetic [0/11]
+      1. [ ] Absolute [0/2]
+         1. [ ] Absolute value
+         2. [ ] Absolute difference
+      2. [ ] Reciprocal [0/3]
+         1. [ ] Reciprocal estimate
+         2. [ ] Reciprocal square-root estimate
+         3. [ ] Reciprocal step
+      3. [ ] Rounding
+      4. [ ] Square root
+      5. [ ] Add [0/1]
+         1. [ ] Addition
+      6. [ ] Division
+      7. [ ] Maximum
+      8. [ ] Minimum
+      9. [ ] Multiply [0/3]
+         1. [ ] Multiplication
+         2. [ ] Multiply extended
+         3. [ ] Fused multiply-accumulate
+      10. [ ] Pairwise arithmetic [0/3]
+          1. [ ] Pairwise addition
+          2. [ ] Pairwise maximum
+          3. [ ] Pairwise minimum
+      11. [ ] Subtract [0/1]
+          1. [ ] Subtraction
+   2. [ ] Compare [0/14]
+      1. [ ] Bitwise equal to zero
+      2. [ ] Greater than or equal to zero
+      3. [ ] Greater than zero
+      4. [ ] Less than or equal to zero
+      5. [ ] Less than zero
+      6. [ ] Absolute greater than or equal to
+      7. [ ] Absolute greater than
+      8. [ ] Absolute less than or equal to
+      9. [ ] Absolute less than
+      10. [ ] Equal to
+      11. [ ] Greater than or equal to
+      12. [ ] Greater than
+      13. [ ] Less than or equal to
+      14. [ ] Less than
+   3. [ ] Data type conversion [0/1]
+      1. [ ] Conversions
+   4. [ ] Logical [0/1]
+      1. [ ] Negate
+7. [ ] Additional intrinsics added in ACLE 3.0 for data processing (Always
+   available) [0/3]
+   1. [ ] Bit manipulation [0/1]
+      1. [ ] Bitwise select
+   2. [ ] Vector manipulation [0/6]
+      1. [ ] Zip elements
+      2. [ ] Unzip elements
+      3. [ ] Transpose elements
+      4. [ ] Set all lanes to the same value
+      5. [ ] Extract vector from a pair of vectors
+      6. [ ] Reverse elements
+   3. [ ] Move [0/1]
+      1. [ ] Vector move
+8. [ ] Dot Product intrinsics added for ARMv8.2-a and newer. Requires the
+   +dotprod architecture extension. [0/1]
+   1. [ ] Vector arithmetic [0/1]
+      1. [ ] Dot product
+9. [ ] Armv8.4-a intrinsics. [0/2]
+   1. [ ] Cryptography [0/3]
+      1. [ ] SHA512
+      2. [ ] SM3
+      3. [ ] SM4
+   2. [ ] Logical [0/4]
+      1. [ ] Exclusive OR
+      2. [ ] Rotate and exclusive OR
+      3. [ ] Exclusive OR and rotate
+      4. [ ] Bit clear and exclusive OR
+10. [ ] FP16 Armv8.4-a [0/1]
+    1. [ ] Vector arithmetic [0/1]
+       1. [ ] Multiply [0/1]
+          1. [ ] Fused multiply-accumulate
+11. [ ] Complex operations from Armv8.3-a [0/1]
+    1. [ ] Complex arithmetic [0/3]
+       1. [ ] Complex addition
+       2. [ ] Complex multiply-accumulate
+       3. [ ] Complex multiply-accumulate by scalar
+12. [ ] Floating-point rounding intrinsics from Armv8.5-A [0/1]
+    1. [ ] Vector arithmetic [0/1]
+       1. [ ] Rounding
+13. [ ] Matrix multiplication intrinsics from Armv8.6-A [0/1]
+    1. [ ] Vector arithmetic [0/2]
+       1. [ ] Matrix multiply
+       2. [ ] Dot product
+14. [ ] Bfloat16 intrinsics Requires the +bf16 architecture extension. [0/6]
+    1. [ ] Vector manipulation [0/6]
+       1. [ ] Create vector
+       2. [ ] Set all lanes to the same value
+       3. [ ] Combine vectors
+       4. [ ] Split vectors
+       5. [ ] Set vector lane
+       6. [ ] Copy vector lane
+    2. [ ] Load [0/1]
+       1. [ ] Stride
+    3. [ ] Store [0/1]
+       1. [ ] Stride
+    4. [ ] Data type conversion [0/2]
+       1. [ ] Reinterpret casts
+       2. [ ] Conversions
+    5. [ ] Vector arithmetic [0/3]
+       1. [ ] Dot product
+       2. [ ] Matrix multiply
+       3. [ ] Multiply [0/1]
+          1. [ ] Multiply-accumulate
+    6. [ ] Scalar arithmetic [0/1]
+       1. [ ] Vector multiply-accumulate by scalar

@@ -1,0 +1,52 @@
+// 2023-04-14 11:49
+#ifndef NEON_EMU_H
+#define NEON_EMU_H
+
+#include <reinterp.h>
+#include <vabd.h>
+#include <vadd.h>
+#include <vaddv.h>
+#include <vand.h>
+#include <vbic.h>
+#include <vbsl.h>
+#include <vcage.h>
+#include <vceq.h>
+#include <vcge.h>
+#include <vcgt.h>
+#include <vcls.h>
+#include <vclz.h>
+#include <vcnt.h>
+#include <vcombine.h>
+#include <vcopy_lane.h>
+#include <vcreate.h>
+#include <vcvt.h>
+#include <vdup.h>
+#include <veor.h>
+#include <vext.h>
+#include <vget.h>
+#include <vld.h>
+#include <vmax.h>
+#include <vmaxv.h>
+#include <vmov.h>
+#include <vmul.h>
+#include <vmvn.h>
+#include <vneg.h>
+#include <vorn.h>
+#include <vorr.h>
+#include <vpadd.h>
+#include <vpmax.h>
+#include <vrbit.h>
+#include <vrecp.h>
+#include <vrev.h>
+#include <vrnd.h>
+#include <vset_lane.h>
+#include <vshl.h>
+#include <vshr.h>
+#include <vsqrt.h>
+#include <vtbl.h>
+#include <vtrn.h>
+#include <vtst.h>
+#include <vuzp.h>
+#include <vzip.h>
+
+#endif  // NEON_EMU_H

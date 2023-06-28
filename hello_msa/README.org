@@ -1,0 +1,22 @@
+
+
+* 指令格式
+
+={7.h}{4.a}xxx{8.r}{1.v}{5.s}{6.i}_{2.s,u}_{3.b,h,w,d}=
+
+- 1.v
+- 2.s,u  signed/unsigned
+- 3.b,h,w,d 向量元素的类型: int8, int16, int32, int64
+- 4.a absolute
+- 5.s saturate
+- 6.i 立即数
+- 7.h horizontal
+- 8.r rounding
+
+* List of Intrinsics
+
+https://repo.oss.cipunited.com/documents/MD00926-2B-MSA-WHT-01.03.pdf
+
+https://s3-eu-west-1.amazonaws.com/downloads-mips/documents/MD00866-2B-MSA32-AFP-01.12.pdf
+
+https://gcc.gnu.org/onlinedocs/gcc/MIPS-SIMD-Architecture-Built-in-Functions.html

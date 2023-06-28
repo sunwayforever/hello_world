@@ -1,0 +1,16 @@
+    .text
+    .global print
+    .global exit
+print:
+    move    $t1, $a0
+    move    $t2, $a1
+    li      $a0, 1
+    move    $a1, $t1
+    move    $a2, $t2
+    li      $v0, 4004
+    syscall
+    jr      $ra
+
+exit:
+    li      $v0, 4001
+    syscall

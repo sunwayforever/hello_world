@@ -1,0 +1,14 @@
+    .text
+    .global main
+main:
+    la      $a0,hello
+    li      $a1,6
+    jal     print
+    la      $a0,world
+    li      $a1,6
+    jal     print
+    j       exit
+
+    .data
+hello: .ascii "hello\n"
+world: .ascii "world\n"

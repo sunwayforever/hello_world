@@ -1,0 +1,32 @@
+    .text
+    .globl  main
+main:
+    bal     get_num
+    move    $t1, $v0
+    bal     get_num
+    move    $t2, $v0
+    add     $t3, $t1, $t2
+    add     $t3, 48
+    sb      $t3, buffer
+    bal     print
+    b       main
+
+get_num:
+    li      $v0, 4003
+    li      $a0, 0
+    la      $a1, buffer
+    li      $a2, 1
+    syscall
+    lb      $v0, buffer
+    sub     $v0, 48
+    jr      $ra
+
+print:
+    li      $a0, 1
+    la      $a1, buffer
+    li      $a2, 2
+    li      $v0, 4004
+    syscall
+    jr      $ra
+    .data
+buffer: .asciiz "0\n"

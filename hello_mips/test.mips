@@ -1,0 +1,10 @@
+    .text   0x4000d4
+    .global __start
+
+__start:
+    mul     $t1, $t2, $t3
+    move    $t2, $t1
+    lw      $t3, a
+
+    .sdata
+a:  .word   1
