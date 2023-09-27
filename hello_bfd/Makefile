@@ -1,7 +1,7 @@
 TEST:=$(patsubst %.c,%.elf,$(wildcard test_*.c))
 
 LDLIBS:=-lbfd
-CFLAGS:=-g
+CFLAGS:=-g -DPACKAGE="test" -DPACKAGE_VERSION="1.0"
 
 all:${TEST}
 
