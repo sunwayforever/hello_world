@@ -16,6 +16,7 @@ void createFunction() {
     StructType *StructTy = StructType::create(
         {
             B->getInt32Ty(),
+            B->getInt64Ty(),
             B->getInt32Ty(),
         },
         "Test");
@@ -27,10 +28,12 @@ void createFunction() {
 
     BasicBlock *Entry = BasicBlock::Create(TheContext, "entry", FooFunc);
     B->SetInsertPoint(Entry);
-    Value *S0 = B->CreateGEP(
-        StructTy, FooFunc->getArg(0), {B->getInt32(0), B->getInt32(0)});
-    Value *S1 = B->CreateGEP(
-        StructTy, FooFunc->getArg(0), {B->getInt32(0), B->getInt32(1)});
+    // Value *S0 = B->CreateGEP(
+    //     StructTy, FooFunc->getArg(0), {B->getInt32(0), B->getInt32(0)});
+    // Value *S1 = B->CreateGEP(
+    //     StructTy, FooFunc->getArg(0), {B->getInt32(0), B->getInt32(2)});
+    Value *S0 = B->CreateStructGEP(StructTy, FooFunc->getArg(0), 0);
+    Value *S1 = B->CreateStructGEP(StructTy, FooFunc->getArg(0), 2);
     B->CreateStore(B->getInt32(1), S0);
     B->CreateStore(B->getInt32(2), S1);
     B->CreateRetVoid();
