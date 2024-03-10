@@ -26,8 +26,7 @@ popd
 
 # get pretrianed model
 
-get models from https://mega.nz/folder/X5UD1LDY#8ZI-gAq6AkpcUbE2z4n6RA and save
-models to `model` directory
+get models from https://mega.nz/folder/a91WnASZ#8ZI-gAq6AkpcUbE2z4n6RA and save models to `model` directory
 
 # run
 
